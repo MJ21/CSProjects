@@ -37,7 +37,10 @@ class BinHeap:
     if i * 2 + 1 > self.size:
       return i * 2
     else:
-      return i * 2 + 1
+      if self.heapList[i*2] < self.heapList[i*2+1]:
+        return i * 2
+      else:
+        return i * 2 + 1
       
   def deleteMin(self):
     value = self.heapList[1]
