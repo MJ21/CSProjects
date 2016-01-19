@@ -48,7 +48,29 @@ def print_parens(s, i, j):
     result += print_parens(s, s[keyify(i,j)]+1,j)
     result += ")"
   return result 
- 
+  
+
+#Dynamic programming: Top Down: Chain Matrix Multiplication with Memoization - see Cormen 
+def memoMatrixChain(arr):
+  m = {}
+  n = len(arr)-1
+  for i in range(1,n+1):
+    for j in range(i,n+1):
+      m[keyify(i,j)] = sys.maxint 
+  return lookupChain(m, arr, 1, n)
+  
+def lookupChain(m, arr, i, j):
+  if m[keyify(i,j)] < sys.maxint:
+    return m[keyify(i,j)]   
+  if i == j:
+    m[keyify(i,j)] = 0
+  else:
+    for k in range(i,j):
+      cost = lookupChain(m,arr,i,k)+lookupChain(m,arr,k+1,j)+arr[i-1]*arr[k]*arr[j] 
+      if cost < m[keyify(i,j)]:
+        m[keyify(i,j)] = cost 
+  return m[keyify(i,j)]
+  
 #Given matrices 50 x 20, 20 x 50, 50 x 1
 #initial i = 1, Total matrices n = 3
 arr = [50, 20, 50, 1]
@@ -59,3 +81,4 @@ best, order = MatrixChainDP(arr1, len(arr1)-1)
 print "Optimal solution: # of multiplications: ", best[keyify(1,len(arr1)-1)]
 print "Order of operations", print_parens(order,1, len(arr1)-1)
 
+print "Recursive Matrix Chain with Memoization:", memoMatrixChain(arr1)
